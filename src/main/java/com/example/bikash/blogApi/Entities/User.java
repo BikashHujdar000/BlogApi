@@ -1,5 +1,7 @@
 package com.example.bikash.blogApi.Entities;
 
+
+import java.util.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,4 +21,10 @@ public class User {
   private String email;
   private String password;
   private String about;
+
+      @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<Post>posts = new ArrayList<>();
+
+  
+
 }

@@ -1,8 +1,10 @@
 package com.example.bikash.blogApi.DTO;
 
+
+import java.util.*;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -32,4 +34,6 @@ public class UserDTo {
 
 
     private  String about;
+
+
 }
