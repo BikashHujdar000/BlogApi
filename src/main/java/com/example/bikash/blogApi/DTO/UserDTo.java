@@ -36,4 +36,6 @@ public class UserDTo {
     private  String about;
 
 
+    private List<CommentDto> comments = new ArrayList<>();
+
 }

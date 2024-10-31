@@ -95,12 +95,14 @@ public class UserServiceImplemenation implements UserService {
     }
 
     public UserDTo usertoUserDto(User user) {
-        UserDTo userDTo = new UserDTo();
-        userDTo.setId(user.getId());
-        userDTo.setName(user.getName());
-        userDTo.setEmail(user.getEmail());
-        userDTo.setPassword(user.getPassword());
-        userDTo.setAbout(user.getAbout());
+//        UserDTo userDTo = new UserDTo();
+//        userDTo.setId(user.getId());
+//        userDTo.setName(user.getName());
+//        userDTo.setEmail(user.getEmail());
+//        userDTo.setPassword(user.getPassword());
+//        userDTo.setAbout(user.getAbout());
+
+        UserDTo userDTo = this.modelMapper.map(user,UserDTo.class);
         return userDTo;
     }
 
