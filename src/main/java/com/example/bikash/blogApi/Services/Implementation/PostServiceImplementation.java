@@ -14,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.example.bikash.blogApi.DTO.CommentDto;
 import com.example.bikash.blogApi.DTO.PostDto;
 import com.example.bikash.blogApi.DTO.PostResponse;
 import com.example.bikash.blogApi.Entities.Category;
