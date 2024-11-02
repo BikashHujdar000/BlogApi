@@ -8,6 +8,7 @@ import com.example.bikash.blogApi.Services.UserService;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +23,8 @@ public class UserServiceImplemenation implements UserService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     //  create , read , update delete
     @Override
@@ -29,6 +32,10 @@ public class UserServiceImplemenation implements UserService {
 
         // creste user repo
         User user = this.dtoToUser(userDTo);
+
+        String password = user.getPassword();
+        String hashedPassword = this.passwordEncoder.encode(password);
+        user.setPassword(hashedPassword);
         User savedUser = this.userRepo.save(user);
         return this.usertoUserDto(savedUser);
 
