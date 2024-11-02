@@ -1,10 +1,13 @@
 package com.example.bikash.blogApi.Services.Implementation;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 
+import com.cloudinary.Cloudinary;
+import com.example.bikash.blogApi.ImageService.CloudService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.internal.bytebuddy.implementation.bytecode.constant.IntegerConstant;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.bikash.blogApi.DTO.PostDto;
@@ -24,10 +29,18 @@ import com.example.bikash.blogApi.Repositories.CategoryRepo;
 import com.example.bikash.blogApi.Repositories.PostRepo;
 import com.example.bikash.blogApi.Repositories.UserRepo;
 import com.example.bikash.blogApi.Services.PostService;
+import org.springframework.web.bind.annotation.ModelAttribute;
+
 import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImplementation implements PostService {
+
+    @Autowired
+    private Cloudinary cloudinary;
+
+    @Autowired
+    private CloudService cloudService;
 
     @Autowired
    private  PostRepo postRepo;
@@ -43,24 +56,35 @@ public class PostServiceImplementation implements PostService {
 
 
    @Override
-   public PostDto createPost(PostDto postDto, Integer userId, Integer categoryId) {
+   public PostDto createPost( PostDto postDto, Integer userId, Integer categoryId) {
       
    User user = this.userRepo.findById(userId).orElseThrow(()-> new ResourceNotFound("User", "userId",userId));
           
    Category category = this.categoryRepo.findById(categoryId).orElseThrow(()-> new ResourceNotFound("Category","categoryId",categoryId));
-       
 
-   Post post = this.modelMapper.map(postDto, Post.class);
+       Post post = this.modelMapper.map(postDto, Post.class);
+       post.setAddedDate(new Date());
+       post.setUser(user);
+       post.setCategory(category);
 
-   post.setImageName("default.png");
-   post.setAddedDate(new Date());
-   post.setUser(user);
-   post.setCategory(category);
+       try {
+          String link=  this.cloudService.uploadImage(postDto.getFile());
+           System.out.println(link);
+           post.setPostImage(link);
+       } catch (IOException e) {
+          ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+       }
 
-   Post savedPost = this.postRepo.save(post);
+
+       Post savedPost = this.postRepo.save(post);
+
+       System.out.println(" SAved post in databse" + savedPost);
 
 
-  return  this.modelMapper.map(savedPost, PostDto.class);
+
+
+
+  return     this.modelMapper.map(savedPost, PostDto.class);
 
    }
 
@@ -73,7 +97,7 @@ public class PostServiceImplementation implements PostService {
         post.setAddedDate(postDto.getAddedDate());
         post.setTitle(postDto.getTitle());
         post.setContent(postDto.getContent());
-        post.setImageName(postDto.getImageName());
+        post.setPostImage(postDto.getPostImage());
 
          Post savedPost = this.postRepo.save(post);
 

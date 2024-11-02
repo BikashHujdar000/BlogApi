@@ -1,15 +1,11 @@
 package com.example.bikash.blogApi.DTO;
 import java.util.*;
 
-
-
-import com.example.bikash.blogApi.Entities.Category;
-
-import com.example.bikash.blogApi.Entities.Comment;
-import com.example.bikash.blogApi.Entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
+
 
 @Data
 @NoArgsConstructor
@@ -22,11 +18,18 @@ public class PostDto {
 
     private String content;
 
-    private String imageName;
+    private String  postImage;
 
     private Date addedDate;
      
     private UserDTo user;
+
+
+    // usisng as image file
+    private MultipartFile file;
+
+
+
 
     private CategoryDto category;
 

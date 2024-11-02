@@ -6,23 +6,14 @@ import org.modelmapper.internal.bytebuddy.implementation.bytecode.constant.Integ
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.*;
 import com.example.bikash.blogApi.DTO.PostDto;
 import com.example.bikash.blogApi.DTO.PostResponse;
 import com.example.bikash.blogApi.Entities.Post;
 import com.example.bikash.blogApi.Exceptions.ApiResponse;
 import com.example.bikash.blogApi.Services.PostService;
-
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PutMapping;
-
 
 
 @RestController
@@ -36,7 +27,7 @@ public class PostController {
 
     @PostMapping("/user/{userId}/category/{categoryId}/posts")
     public ResponseEntity<PostDto> createPost(
-    @RequestBody PostDto postDto, 
+    @ModelAttribute PostDto postDto,
     @PathVariable("userId") Integer userId,
     @PathVariable("categoryId") Integer categoryId)
 

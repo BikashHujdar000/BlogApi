@@ -16,13 +16,14 @@ public class BlogApiApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		System.out.println("databse is confermed and running well");
+		System.out.println("database configured well");
 
 	}
 
 	@Bean
 	public ModelMapper modelMapper()
 	{
+
 
 		return new ModelMapper();
 

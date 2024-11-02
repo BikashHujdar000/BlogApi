@@ -1,5 +1,6 @@
 package com.example.bikash.blogApi.Security.Configuration;
 
+import com.cloudinary.Cloudinary;
 import com.example.bikash.blogApi.Security.JWT.JwtRequestFilter;
 import com.example.bikash.blogApi.Security.JWT.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 @EnableWebSecurity
@@ -49,5 +53,22 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return  configuration.getAuthenticationManager();
     }
+
+
+    @Bean
+    public Cloudinary getCloudinary()
+    {
+
+        // config
+        Map config = new HashMap<>();
+
+        config.put("cloud_name", "dul8qqnyk");
+        config.put("api_key", "862871565426863");
+        config.put("api_secret", "upNKc57dnLjxk4jNYl1kzmJ8qlI");
+        config.put("secure",true);
+        return  new Cloudinary(config);
+
+    }
+
 
 }

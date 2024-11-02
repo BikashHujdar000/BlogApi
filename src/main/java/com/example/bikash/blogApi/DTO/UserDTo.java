@@ -32,7 +32,6 @@ public class UserDTo {
     @Pattern(regexp = "^[\\w-\\.]+@[\\w-]+\\.[a-zA-Z]{2,4}$", message = "Email format is invalid")
     private  String email;
 
-
     private  String about;
 
 
