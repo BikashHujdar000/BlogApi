@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,12 +35,13 @@ public class SecurityConfig {
     {
         return   security.csrf(csrf-> csrf.disable())
                 .authorizeHttpRequests(authorizeRequest->authorizeRequest
-                        .requestMatchers("/api/users/","/api/login").permitAll()
+                        .requestMatchers("/api/users/","/api/login","/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/**").authenticated())
                        .sessionManagement(sessionManagenent->sessionManagenent
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterAfter(this.jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
+
     }
 
 
