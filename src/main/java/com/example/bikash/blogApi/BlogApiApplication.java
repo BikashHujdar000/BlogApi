@@ -16,7 +16,7 @@ public class BlogApiApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		System.out.println("database configured well");
+		System.out.println("Data base   and managed changed");
 
 	}
 
