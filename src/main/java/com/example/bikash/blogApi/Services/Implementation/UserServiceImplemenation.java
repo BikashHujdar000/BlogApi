@@ -1,7 +1,9 @@
 package com.example.bikash.blogApi.Services.Implementation;
 
 import com.example.bikash.blogApi.DTO.UserDTo;
+import com.example.bikash.blogApi.DTO.UserRequest;
 import com.example.bikash.blogApi.Entities.User;
+import com.example.bikash.blogApi.Exceptions.BadCredentialException;
 import com.example.bikash.blogApi.Exceptions.ResourceNotFound;
 import com.example.bikash.blogApi.Repositories.UserRepo;
 import com.example.bikash.blogApi.Services.UserService;
@@ -12,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,15 +31,29 @@ public class UserServiceImplemenation implements UserService {
 
     //  create , read , update delete
     @Override
-    public UserDTo createUser(UserDTo userDTo) {
+    public UserDTo createUser(UserRequest userRequest) {
 
         // creste user repo
-        User user = this.dtoToUser(userDTo);
 
+        // Check if a user already exists with the provided email
+        Optional<User> checkUser = this.userRepo.findByEmail(userRequest.getEmail());
+
+        if (checkUser.isPresent()) {
+            // If user already exists, throw a custom exception or handle the error gracefully
+            throw new BadCredentialException("User with this email already exists");
+        }
+        // Map userRequest to User entity
+        User user = this.modelMapper.map(userRequest, User.class);
+
+        // Encode the user's password
         String password = user.getPassword();
         String hashedPassword = this.passwordEncoder.encode(password);
         user.setPassword(hashedPassword);
+
+        // Save the new user to the database
         User savedUser = this.userRepo.save(user);
+
+        // Return the saved user as a DTO
         return this.usertoUserDto(savedUser);
 
     }
@@ -47,7 +64,6 @@ public class UserServiceImplemenation implements UserService {
         User user = this.userRepo.findById(id).orElseThrow(() -> new ResourceNotFound("user", "id", id));
         user.setName(userDTo.getName());
         user.setEmail(userDTo.getEmail());
-        user.setPassword(userDTo.getPassword());
         user.setAbout(userDTo.getAbout());
 
         User updatedUser = this.userRepo.save(user);

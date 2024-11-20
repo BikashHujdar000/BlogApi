@@ -1,6 +1,7 @@
 package com.example.bikash.blogApi.Controllers;
 
 import com.example.bikash.blogApi.DTO.UserDTo;
+import com.example.bikash.blogApi.DTO.UserRequest;
 import com.example.bikash.blogApi.Exceptions.ApiResponse;
 import com.example.bikash.blogApi.Exceptions.ResourceNotFound;
 import com.example.bikash.blogApi.Services.UserService;
@@ -22,10 +23,10 @@ public class UserController {
     private UserService userService;
 
     //post - creaate user
-    @PostMapping("/")
-  public ResponseEntity<UserDTo> createUser( @Valid @RequestBody UserDTo userDTo)
+    @PostMapping("/create")
+  public ResponseEntity<UserDTo> createUser( @Valid @RequestBody UserRequest userRequest)
   {
-      UserDTo createdUserDto = userService.createUser(userDTo);
+      UserDTo createdUserDto = userService.createUser(userRequest);
       return  new  ResponseEntity<>(createdUserDto,HttpStatus.CREATED );
 
   }

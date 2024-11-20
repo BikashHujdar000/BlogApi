@@ -2,6 +2,8 @@ package com.example.bikash.blogApi.Entities;
 
 
 import java.util.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,8 +20,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  int id;
   private  String name;
+
+  @Column(unique = true)
   private String email;
-  private String password;
+
+  @JsonIgnore
+  @Column(nullable = false)
+  private String password; 
   private String about;
 
       @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)

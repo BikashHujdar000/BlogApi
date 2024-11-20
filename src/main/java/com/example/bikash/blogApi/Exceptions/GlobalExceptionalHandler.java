@@ -39,4 +39,15 @@ public class GlobalExceptionalHandler {
         return new ResponseEntity<Map<String , String>>(resp,HttpStatus.BAD_REQUEST);
     }
 
+
+
+    @ExceptionHandler(BadCredentialException.class)
+    public  ResponseEntity<ApiResponse>IllegalStateException(BadCredentialException ex)
+    {
+        String message = ex.getMessage();
+        ApiResponse apiResponse = new ApiResponse(message,false);
+        return   new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.BAD_REQUEST);
+
+    }
+
 }
