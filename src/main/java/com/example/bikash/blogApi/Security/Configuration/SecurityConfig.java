@@ -38,7 +38,8 @@ public class SecurityConfig {
     public DefaultSecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
         return security.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorizeRequest -> authorizeRequest
-                        .requestMatchers("/api/users/create", "/api/login", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/api/users/create","/api/email/**",
+                                "/api/login", "/swagger-ui/**", "/v3/api-docs/**","/api/categories/get/**","/api/get/**").permitAll()
                         .requestMatchers("/api/**").authenticated())
                 .sessionManagement(sessionManagenent -> sessionManagenent
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -90,7 +91,7 @@ public class SecurityConfig {
 
         source.registerCorsConfiguration("/**", corsConfiguration);
         FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
-        bean.setOrder(0); // Ensure it runs early
+        bean.setOrder(-110); // Ensure it runs early
         return bean;
     }
 

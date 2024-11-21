@@ -1,11 +1,9 @@
 package com.example.bikash.blogApi.Security.JWT;
 
-import com.example.bikash.blogApi.DTO.UserDTo;
+import com.example.bikash.blogApi.DTO.userDto;
 import com.example.bikash.blogApi.Entities.User;
-import com.example.bikash.blogApi.Exceptions.ApiResponse;
 import com.example.bikash.blogApi.Exceptions.BadCredentialException;
 import com.example.bikash.blogApi.Repositories.UserRepo;
-import com.example.bikash.blogApi.Services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,10 +77,9 @@ public class LoginController {
        User user = userRepo.findByEmail(userDetails.getUsername()).get();
 
 
-        UserDTo userDTo = this.modelMapper.map(user,UserDTo.class);
+        userDto userDTo = this.modelMapper.map(user, userDto.class);
 
       String token = this.jwtUtils.generateToken(userDetails.getUsername());
-
 
 
 
@@ -90,7 +87,7 @@ public class LoginController {
         LoginResponse loginResponse = new LoginResponse();
 
         loginResponse.setJwtToken(token);
-        loginResponse.setUserDTo(userDTo);
+        loginResponse.setUserDto(userDTo);
         return  new ResponseEntity<LoginResponse>(loginResponse,HttpStatus.ACCEPTED);
 
     }

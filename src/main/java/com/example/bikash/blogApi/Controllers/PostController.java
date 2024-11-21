@@ -36,7 +36,6 @@ public class PostController {
         PostDto createdPost = this.postService.createPost(postDto, userId, categoryId);
 
         return new ResponseEntity<>(createdPost,HttpStatus.CREATED);
-        
 
     }
 
@@ -68,14 +67,14 @@ public class PostController {
     
     // get by category 
 
-    @GetMapping("/category/{categoryId}/posts")
+    @GetMapping("/get/category/{categoryId}/posts")
     public ResponseEntity<List<PostDto>> getPostByCategor (@PathVariable("categoryId") Integer categoryId) {
         List<PostDto> posts  =   this.postService.getPostByCategory(categoryId);
         return new ResponseEntity<List<PostDto>>(posts,HttpStatus.OK);
     }
 
    // get all posts 
-   @GetMapping("/posts")
+   @GetMapping("/get/posts")
    public ResponseEntity<PostResponse> getAllPosts(
     @RequestParam(value = "pageNumber",defaultValue = "0",required = false)Integer pageNumber,
     @RequestParam(value = "pageSize",defaultValue = "5",required = false) Integer pageSize,

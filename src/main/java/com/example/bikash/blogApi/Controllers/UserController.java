@@ -1,9 +1,8 @@
 package com.example.bikash.blogApi.Controllers;
 
-import com.example.bikash.blogApi.DTO.UserDTo;
+import com.example.bikash.blogApi.DTO.userDto;
 import com.example.bikash.blogApi.DTO.UserRequest;
 import com.example.bikash.blogApi.Exceptions.ApiResponse;
-import com.example.bikash.blogApi.Exceptions.ResourceNotFound;
 import com.example.bikash.blogApi.Services.UserService;
 
 import jakarta.validation.Valid;
@@ -24,9 +23,9 @@ public class UserController {
 
     //post - creaate user
     @PostMapping("/create")
-  public ResponseEntity<UserDTo> createUser( @Valid @RequestBody UserRequest userRequest)
+  public ResponseEntity<userDto> createUser(@Valid @RequestBody UserRequest userRequest)
   {
-      UserDTo createdUserDto = userService.createUser(userRequest);
+      userDto createdUserDto = userService.createUser(userRequest);
       return  new  ResponseEntity<>(createdUserDto,HttpStatus.CREATED );
 
   }
@@ -34,17 +33,17 @@ public class UserController {
 
     // get user all
    @GetMapping("/")
-     public  ResponseEntity<List<UserDTo>> getAllUsers()
+     public  ResponseEntity<List<userDto>> getAllUsers()
      {
-          List<UserDTo>allUsers =  this.userService.getAllUsers();
+          List<userDto>allUsers =  this.userService.getAllUsers();
           return  ResponseEntity.ok(allUsers);
      }
 
 
     // get user by Id
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDTo> getUserById(@PathVariable("userId") Integer userId) {
-        UserDTo userInfo = this.userService.getUserById(userId);
+    public ResponseEntity<userDto> getUserById(@PathVariable("userId") Integer userId) {
+        userDto userInfo = this.userService.getUserById(userId);
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }
 
@@ -55,9 +54,9 @@ public class UserController {
     //post update user
 
   @PutMapping("/{userId}")
-    public ResponseEntity<UserDTo> updateUser(  @Valid @RequestBody UserDTo userDTo, @PathVariable("userId") Integer id){
+    public ResponseEntity<userDto> updateUser(@Valid @RequestBody userDto userDTo, @PathVariable("userId") Integer id){
 
-        UserDTo updatedUser =   this.userService.updateUser(userDTo,id);
+        userDto updatedUser =   this.userService.updateUser(userDTo,id);
 
         return  new ResponseEntity<>(updatedUser, HttpStatus.OK);
 

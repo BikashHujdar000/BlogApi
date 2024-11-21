@@ -61,7 +61,7 @@ public class CategoryController {
      }
      //get by Id
 
-     @GetMapping("/{categoryId}")
+     @GetMapping("/get/{categoryId}")
      public ResponseEntity<CategoryDto>getCategoryById(@PathVariable ("categoryId") Integer categoryId)
      {
          CategoryDto cat = this.categoryService.getCategory(categoryId);
@@ -74,7 +74,7 @@ public class CategoryController {
 
      //get all 
 
-     @GetMapping("/")
+     @GetMapping("/get")
      public ResponseEntity<List<CategoryDto>> getAllCategories()
      {
            List<CategoryDto> categoryDtos =  this.categoryService.getCategories();

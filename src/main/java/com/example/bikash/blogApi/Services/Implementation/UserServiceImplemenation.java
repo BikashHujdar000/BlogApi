@@ -1,6 +1,6 @@
 package com.example.bikash.blogApi.Services.Implementation;
 
-import com.example.bikash.blogApi.DTO.UserDTo;
+import com.example.bikash.blogApi.DTO.userDto;
 import com.example.bikash.blogApi.DTO.UserRequest;
 import com.example.bikash.blogApi.Entities.User;
 import com.example.bikash.blogApi.Exceptions.BadCredentialException;
@@ -31,7 +31,7 @@ public class UserServiceImplemenation implements UserService {
 
     //  create , read , update delete
     @Override
-    public UserDTo createUser(UserRequest userRequest) {
+    public userDto createUser(UserRequest userRequest) {
 
         // creste user repo
 
@@ -59,7 +59,7 @@ public class UserServiceImplemenation implements UserService {
     }
 
     @Override
-    public UserDTo updateUser(UserDTo userDTo, Integer id) {
+    public userDto updateUser(userDto userDTo, Integer id) {
 
         User user = this.userRepo.findById(id).orElseThrow(() -> new ResourceNotFound("user", "id", id));
         user.setName(userDTo.getName());
@@ -73,7 +73,7 @@ public class UserServiceImplemenation implements UserService {
 
 
     @Override
-    public UserDTo getUserById(Integer id) {
+    public userDto getUserById(Integer id) {
 
 
         User userRe = this.userRepo.findById(id).
@@ -84,12 +84,12 @@ public class UserServiceImplemenation implements UserService {
 
 
     @Override
-    public List<UserDTo> getAllUsers() {
+    public List<userDto> getAllUsers() {
 
 
         List<User> users = this.userRepo.findAll();
 
-        List<UserDTo> userDTos = users.stream().map(user -> this.usertoUserDto(user)).collect(Collectors.toList());
+        List<userDto> userDTos = users.stream().map(user -> this.usertoUserDto(user)).collect(Collectors.toList());
         return userDTos;
 
 
@@ -104,7 +104,7 @@ public class UserServiceImplemenation implements UserService {
 
 
     // for now lets create a userto dto and vice versa methods we will user later on model mapper
-    public User dtoToUser(UserDTo userDTo) {
+    public User dtoToUser(userDto userDTo) {
 
         // User user = new User();
         // user.setId(userDTo.getId());
@@ -117,15 +117,15 @@ public class UserServiceImplemenation implements UserService {
         return user;
     }
 
-    public UserDTo usertoUserDto(User user) {
-//        UserDTo userDTo = new UserDTo();
+    public userDto usertoUserDto(User user) {
+//        userDto userDTo = new userDto();
 //        userDTo.setId(user.getId());
 //        userDTo.setName(user.getName());
 //        userDTo.setEmail(user.getEmail());
 //        userDTo.setPassword(user.getPassword());
 //        userDTo.setAbout(user.getAbout());
 
-        UserDTo userDTo = this.modelMapper.map(user,UserDTo.class);
+        userDto userDTo = this.modelMapper.map(user, userDto.class);
         return userDTo;
     }
 

@@ -67,6 +67,8 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer postId;
     private String title;
+
+    @Lob
     private String content;
     private String postImage;
     private Date addedDate;

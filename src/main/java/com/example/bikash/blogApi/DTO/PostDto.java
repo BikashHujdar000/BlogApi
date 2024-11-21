@@ -22,13 +22,11 @@ public class PostDto {
 
     private Date addedDate;
      
-    private UserDTo user;
+    private userDto user;
 
 
     // usisng as image file
     private MultipartFile file;
-
-
 
 
     private CategoryDto category;
