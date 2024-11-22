@@ -26,8 +26,12 @@ public class User {
 
   @JsonIgnore
   @Column(nullable = false)
-  private String password; 
+  private String password;
+
+
   private String about;
+
+  private  List<String> profileImages = new ArrayList<>();
 
       @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Post>posts = new ArrayList<>();

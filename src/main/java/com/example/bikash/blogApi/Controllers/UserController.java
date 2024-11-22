@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,21 +24,19 @@ public class UserController {
 
     //post - creaate user
     @PostMapping("/create")
-  public ResponseEntity<userDto> createUser(@Valid @RequestBody UserRequest userRequest)
-  {
-      userDto createdUserDto = userService.createUser(userRequest);
-      return  new  ResponseEntity<>(createdUserDto,HttpStatus.CREATED );
+    public ResponseEntity<userDto> createUser(@Valid @RequestBody UserRequest userRequest) {
+        userDto createdUserDto = userService.createUser(userRequest);
+        return new ResponseEntity<>(createdUserDto, HttpStatus.CREATED);
 
-  }
+    }
 
 
     // get user all
-   @GetMapping("/")
-     public  ResponseEntity<List<userDto>> getAllUsers()
-     {
-          List<userDto>allUsers =  this.userService.getAllUsers();
-          return  ResponseEntity.ok(allUsers);
-     }
+    @GetMapping("/")
+    public ResponseEntity<List<userDto>> getAllUsers() {
+        List<userDto> allUsers = this.userService.getAllUsers();
+        return ResponseEntity.ok(allUsers);
+    }
 
 
     // get user by Id
@@ -48,34 +47,37 @@ public class UserController {
     }
 
 
-
-
-
     //post update user
 
-  @PutMapping("/{userId}")
-    public ResponseEntity<userDto> updateUser(@Valid @RequestBody userDto userDTo, @PathVariable("userId") Integer id){
+    @PutMapping("/{userId}")
+    public ResponseEntity<userDto> updateUser(@Valid @RequestBody userDto userDTo, @PathVariable("userId") Integer id) {
 
-        userDto updatedUser =   this.userService.updateUser(userDTo,id);
+        userDto updatedUser = this.userService.updateUser(userDTo, id);
 
-        return  new ResponseEntity<>(updatedUser, HttpStatus.OK);
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
 
 
-
-  }
-
+    }
 
 
     //delete api
     @DeleteMapping("/{userId}")
-    public  ResponseEntity<ApiResponse> deleteUser( @PathVariable("userId") Integer id)
-    {
-         this.userService.deleteUser(id);
-         return  new ResponseEntity<>(new ApiResponse("Successfully deleated",true),HttpStatus.OK);
+    public ResponseEntity<ApiResponse> deleteUser(@PathVariable("userId") Integer id) {
+        this.userService.deleteUser(id);
+        return new ResponseEntity<>(new ApiResponse("Successfully deleated", true), HttpStatus.OK);
     }
 
 
+    // Upload Profile Image for User
+    @PostMapping("/{userId}/profile")
+    public ResponseEntity<userDto> uploadProfileImage(
+            @PathVariable("userId") Integer userId,
+            @RequestParam("file") MultipartFile file) {
+
+        userDto updatedUser = this.userService.uploadProfileImage(userId, file);
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
 
 
+    }
 
 }

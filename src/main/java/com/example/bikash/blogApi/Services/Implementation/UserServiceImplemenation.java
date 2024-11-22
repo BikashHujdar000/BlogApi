@@ -5,6 +5,7 @@ import com.example.bikash.blogApi.DTO.UserRequest;
 import com.example.bikash.blogApi.Entities.User;
 import com.example.bikash.blogApi.Exceptions.BadCredentialException;
 import com.example.bikash.blogApi.Exceptions.ResourceNotFound;
+import com.example.bikash.blogApi.ImageService.CloudService;
 import com.example.bikash.blogApi.Repositories.UserRepo;
 import com.example.bikash.blogApi.Services.UserService;
 
@@ -12,7 +13,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,6 +31,9 @@ public class UserServiceImplemenation implements UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private CloudService cloudService;
 
     //  create , read , update delete
     @Override
@@ -102,16 +108,41 @@ public class UserServiceImplemenation implements UserService {
         this.userRepo.deleteById(id);
     }
 
+    @Override
+    public userDto uploadProfileImage(Integer userId ,MultipartFile file){
+
+
+
+
+
+        User user = this.userRepo.findById(userId).orElseThrow(() -> new ResourceNotFound("Users", "ID", userId));
+
+        List<String> profileImagesList = user.getProfileImages();
+
+        if (profileImagesList == null) {
+            profileImagesList = new ArrayList<>();
+        }
+
+        try {
+            System.out.println("  userProfile Image umage load  pe aagaya");
+             String profileImage = this.cloudService.uploadImage(file);
+             profileImagesList.add(profileImage);
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            throw  new IllegalStateException("Failed to upload Image");
+        }
+
+
+        user.setProfileImages(profileImagesList);
+       User savedUser =   userRepo.save(user);
+        return  this.modelMapper.map(savedUser,userDto.class);
+
+    }
+
 
     // for now lets create a userto dto and vice versa methods we will user later on model mapper
     public User dtoToUser(userDto userDTo) {
-
-        // User user = new User();
-        // user.setId(userDTo.getId());
-        // user.setName(userDTo.getName());
-        // user.setEmail(userDTo.getEmail());
-        // user.setPassword(userDTo.getPassword());
-        // user.setAbout(userDTo.getAbout());
 
       User user =   this.modelMapper.map(userDTo, User.class);
         return user;
