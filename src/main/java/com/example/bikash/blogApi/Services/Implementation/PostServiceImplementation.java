@@ -1,12 +1,14 @@
 package com.example.bikash.blogApi.Services.Implementation;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 
 import com.cloudinary.Cloudinary;
+import com.example.bikash.blogApi.Exceptions.ApiResponse;
 import com.example.bikash.blogApi.ImageService.CloudService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.internal.bytebuddy.implementation.bytecode.constant.IntegerConstant;
@@ -30,6 +32,7 @@ import com.example.bikash.blogApi.Repositories.PostRepo;
 import com.example.bikash.blogApi.Repositories.UserRepo;
 import com.example.bikash.blogApi.Services.PostService;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.stream.Collectors;
 
@@ -56,35 +59,45 @@ public class PostServiceImplementation implements PostService {
 
 
    @Override
-   public PostDto createPost( PostDto postDto, Integer userId, Integer categoryId) {
-      
-   User user = this.userRepo.findById(userId).orElseThrow(()-> new ResourceNotFound("User", "userId",userId));
-          
-   Category category = this.categoryRepo.findById(categoryId).orElseThrow(()-> new ResourceNotFound("Category","categoryId",categoryId));
+   public PostDto createPost(PostDto postDto, Integer userId, Integer categoryId, MultipartFile[] files) {
+
+
+       User user = this.userRepo.findById(userId)
+               .orElseThrow(() -> new ResourceNotFound("User", "userId", userId));
+
+       Category category = this.categoryRepo.findById(categoryId)
+               .orElseThrow(() -> new ResourceNotFound("Category", "categoryId", categoryId));
+
 
        Post post = this.modelMapper.map(postDto, Post.class);
        post.setAddedDate(new Date());
        post.setUser(user);
        post.setCategory(category);
 
-       try {
-          String link=  this.cloudService.uploadImage(postDto.getFile());
-           System.out.println(link);
-           post.setPostImage(link);
-       } catch (IOException e) {
-          ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-       }
 
+       List<String> imagesList = new ArrayList<>();
+
+
+       try {
+           for (MultipartFile file : files) {
+               String imageLink = this.cloudService.uploadImage(file); // Upload image and get the URL
+               imagesList.add(imageLink);
+           }
+
+      // if its empty i am not going to set
+           if (!imagesList.isEmpty()) {
+               post.setPostImages(imagesList);
+           }
+
+       } catch (IOException e) {
+           // Handle error gracefully and provide a clear message
+           throw new IllegalStateException("Failed to upload images due to server error", e);
+       }
 
        Post savedPost = this.postRepo.save(post);
 
-       System.out.println(" SAved post in databse" + savedPost);
 
-
-
-
-
-  return     this.modelMapper.map(savedPost, PostDto.class);
+       return this.modelMapper.map(savedPost, PostDto.class);
 
    }
 
@@ -97,8 +110,6 @@ public class PostServiceImplementation implements PostService {
         post.setAddedDate(postDto.getAddedDate());
         post.setTitle(postDto.getTitle());
         post.setContent(postDto.getContent());
-        post.setPostImage(postDto.getPostImage());
-
          Post savedPost = this.postRepo.save(post);
 
          return this.modelMapper.map(savedPost, PostDto.class);
@@ -139,11 +150,7 @@ public class PostServiceImplementation implements PostService {
     public PostDto getPostById(Integer postId) {
        Post post = this.postRepo.findById(postId).orElseThrow(()-> new ResourceNotFound("Post","postId",postId));
 
-        
-
        return  this.modelMapper.map(post, PostDto.class);
-
-
     }
 
     @Override

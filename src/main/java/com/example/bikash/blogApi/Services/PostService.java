@@ -3,11 +3,12 @@ import java.util.*;
 import com.example.bikash.blogApi.DTO.PostDto;
 import com.example.bikash.blogApi.DTO.PostResponse;
 import com.example.bikash.blogApi.Entities.Post;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface PostService {
 
 //create
-PostDto createPost(PostDto postDto,Integer userId,Integer categoryId);
+PostDto createPost(PostDto postDto, Integer userId, Integer categoryId, MultipartFile[] files);
 
 //update
 

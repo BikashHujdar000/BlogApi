@@ -18,16 +18,13 @@ public class PostDto {
 
     private String content;
 
-    private String  postImage;
-
     private Date addedDate;
      
     private userDto user;
 
 
-    // usisng as image file
-    private MultipartFile file;
-
+// changing to multiple images
+    private List<String> postImages;
 
     private CategoryDto category;
 

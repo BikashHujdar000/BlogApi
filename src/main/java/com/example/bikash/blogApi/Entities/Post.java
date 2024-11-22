@@ -70,7 +70,10 @@ public class Post {
 
     @Lob
     private String content;
-    private String postImage;
+
+    @ElementCollection
+    private List<String> postImages = new ArrayList<>();
+
     private Date addedDate;
 
     @ManyToOne

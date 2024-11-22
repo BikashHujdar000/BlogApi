@@ -14,6 +14,7 @@ import com.example.bikash.blogApi.DTO.PostResponse;
 import com.example.bikash.blogApi.Entities.Post;
 import com.example.bikash.blogApi.Exceptions.ApiResponse;
 import com.example.bikash.blogApi.Services.PostService;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
@@ -27,13 +28,13 @@ public class PostController {
 
     @PostMapping("/user/{userId}/category/{categoryId}/posts")
     public ResponseEntity<PostDto> createPost(
-    @ModelAttribute PostDto postDto,
-    @PathVariable("userId") Integer userId,
-    @PathVariable("categoryId") Integer categoryId)
-
+            @RequestPart("postDto") PostDto postDto,
+            @RequestPart("files") MultipartFile[] files,
+            @PathVariable("userId") Integer userId,
+            @PathVariable("categoryId") Integer categoryId)
     {  
      
-        PostDto createdPost = this.postService.createPost(postDto, userId, categoryId);
+        PostDto createdPost = this.postService.createPost(postDto, userId, categoryId,files);
 
         return new ResponseEntity<>(createdPost,HttpStatus.CREATED);
 
